@@ -1,18 +1,19 @@
-package server
+package main
 
 import (
+	"log"
 	"net"
+	"net/http"
 	"net/rpc"
 )
 
 func main() {
-	// start the rpc server
-	l, err := net.Listen("tcp", ":8081")
-	logger.Errorf("Error while starting rpc server: %+v", err)
-	go func() {
-		for {
-			rpc.Accept(l)
-		}
-	}()
-	logger.Info("Listening on port 8081 for RPC requests")
+	todoService := NewTodoService()
+	rpc.Register(todoService)
+	rpc.HandleHTTP()
+	l, e := net.Listen("tcp", ":1234")
+	if e != nil {
+		log.Fatal("listen error:", e)
+	}
+	http.Serve(l, nil)
 }
