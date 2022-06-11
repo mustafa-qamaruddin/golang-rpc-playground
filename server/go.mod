@@ -1,3 +1,3 @@
-module go-rpc-playground
+module rpc-server
 
 go 1.18
